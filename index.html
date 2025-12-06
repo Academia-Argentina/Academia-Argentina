@@ -420,6 +420,9 @@
         <button onclick="editarLicencia()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
           ✏️ Editar Licencia
         </button>
+        <button onclick="eliminarLicencia()" class="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+          🗑️ Eliminar Licencia
+        </button>
         <button onclick="cerrarModalLicencia()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition duration-200">
           Cerrar
         </button>
@@ -451,6 +454,9 @@
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
         <button onclick="editarVehiculo()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
           ✏️ Editar Vehículo
+        </button>
+        <button onclick="eliminarVehiculo()" class="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 rounded-xl font-semibold transition duration-200 shadow-lg hover:shadow-xl">
+          🗑️ Eliminar Vehículo
         </button>
         <button onclick="cerrarModalVehiculo()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition duration-200">
           Cerrar
@@ -826,6 +832,27 @@
       mostrarFormularioLicencia();
     }
 
+    function eliminarLicencia() {
+      const clave = prompt("⚠️ ELIMINAR LICENCIA\n\nEsta acción es irreversible.\nIngrese la clave de administrador:");
+      
+      if (clave !== "Admin2025") {
+        if (clave !== null) {
+          mostrarNotificacion('❌ Clave de administrador incorrecta', 'error');
+        }
+        return;
+      }
+
+      if (confirm(`¿Está completamente seguro de eliminar la licencia de ${licenciaActual.nombre}?\n\n⚠️ Esta acción NO se puede deshacer.`)) {
+        delete licencias[licenciaActual.numero];
+        if (guardarLicencias()) {
+          mostrarNotificacion('✅ Licencia eliminada correctamente', 'success');
+          cerrarModalLicencia();
+          actualizarContadores();
+          renderizarLicencias();
+        }
+      }
+    }
+
     // === VEHÍCULOS ===
     function solicitarClaveVehiculo() {
       const clave = prompt("Ingrese la clave de acceso:");
@@ -977,6 +1004,27 @@
       document.getElementById("duenoVehiculo").value = vehiculoActual.dueno;
       
       mostrarFormularioVehiculo();
+    }
+
+    function eliminarVehiculo() {
+      const clave = prompt("⚠️ ELIMINAR VEHÍCULO\n\nEsta acción es irreversible.\nIngrese la clave de administrador:");
+      
+      if (clave !== "Admin2025") {
+        if (clave !== null) {
+          mostrarNotificacion('❌ Clave de administrador incorrecta', 'error');
+        }
+        return;
+      }
+
+      if (confirm(`¿Está completamente seguro de eliminar el vehículo ${vehiculoActual.modelo} (${vehiculoActual.matricula})?\n\n⚠️ Esta acción NO se puede deshacer.`)) {
+        delete vehiculos[vehiculoActual.matricula];
+        if (guardarVehiculos()) {
+          mostrarNotificacion('✅ Vehículo eliminado correctamente', 'success');
+          cerrarModalVehiculo();
+          actualizarContadores();
+          renderizarVehiculos();
+        }
+      }
     }
 
     // === BÚSQUEDA ===
